@@ -2,21 +2,14 @@
     "fuzzing": {
         "timeout": 1000,
         "memory_limit": "none",
-        "dict_paths": ["dicts/http.dict", "dicts/jpeg.dict"],
-        "seeds": ["corpus/basic", "corpus/edge"]
-    },
-    "exploitation": {
-        "rop_chain_max_size": 4096,
-        "shellcode_max_size": 1024,
-        "encoder_algorithms": ["xor", "add", "rol"],
-        "aslr_bypass": ["info_leak", "brute_force", "partial_overwrite"]
+        "dict_paths": ["dicts/http.dict"],
+        "seeds": ["corpus/basic"]
     },
     "targets": {
         "harness": {
             "path": "./harness",
             "type": "file",
-            "format": "raw",
-            "arch": "x64"
+            "format": "raw"
         }
     }
 }

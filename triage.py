@@ -1,6 +1,5 @@
 import os
 import subprocess
-import json
 from pathlib import Path
 
 class Triage:
@@ -9,17 +8,12 @@ class Triage:
         self.results = {}
         
     def get_crashes(self):
-        """Get crashes - this doesn't work on windows"""
         crash_dir = Path(self.findings) / "default" / "crashes"
         if not crash_dir.exists():
-            return []  # no crashes yet
-            
-        crashes = [f for f in crash_dir.iterdir() 
-                  if f.is_file() and f.name != "README.txt" and not f.name.startswith('.')]
-        return crashes
+            return []
+        return [f for f in crash_dir.iterdir() if f.is_file() and f.name != "README.txt"]
     
     def analyze_crash(self, crash_file, target):
-        """Analyze crash with gdb"""
         gdb_script = f"""
 set pagination off
 set logging file /tmp/gdb_{crash_file.name}.log
@@ -32,7 +26,6 @@ x/20x $sp
 quit
 """
         
-        # write script to temp file
         with open("/tmp/gdb_script", "w") as f:
             f.write(gdb_script)
             
@@ -42,7 +35,6 @@ quit
         except subprocess.TimeoutExpired:
             return {"status": "timeout", "signal": "SIGKILL"}
             
-        # parse gdb output - this is hacky
         try:
             with open(f"/tmp/gdb_{crash_file.name}.log") as f:
                 log = f.read()
@@ -52,24 +44,17 @@ quit
                 signal = "SIGSEGV"
             elif "SIGABRT" in log:
                 signal = "SIGABRT"
-            elif "SIGILL" in log:
-                signal = "SIGILL"
                 
-            return {"status": "crash", "signal": signal, "log": log[:500]}  # truncate log
-        except FileNotFoundError:
-            return {"status": "error", "signal": "no_log"}
+            return {"status": "crash", "signal": signal, "log": log}
+        except:
+            return {"status": "error"}
     
     def run_triage(self, target):
-        """Run triage """
         crashes = self.get_crashes()
-        print(f"Found {len(crashes)} crashes to analyze")
-        
         for crash in crashes:
-            print(f"Analyzing {crash.name}...")
             res = self.analyze_crash(crash, target)
             self.results[str(crash)] = res
             
-            # store in db 
             import sqlite3
             db = sqlite3.connect("vulns.db")
             c = db.cursor()
