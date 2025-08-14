@@ -3,22 +3,9 @@ services:
   epsoday:
     build: .
     volumes:
-      - ./targets:/app/targets
+      - ./targets:/app/targets:ro
       - ./findings:/app/findings
-      - ./tests:/app/tests
     environment:
       - AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
     ports:
       - "8080:8080"
-      
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: vulns
-      POSTGRES_USER: eps0
-      POSTGRES_PASSWORD: vulns123
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      
-volumes:
-  postgres_data:

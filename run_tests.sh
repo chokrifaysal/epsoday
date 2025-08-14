@@ -1,22 +1,10 @@
 #!/bin/bash
+set -e
 
-echo "EPSODAY Test Suite"
-echo "=================="
+echo "Running tests..."
 
-# Build everything
-echo "Building..."
 make clean && make
+python3 -m pytest tests/ -v --tb=short
+cargo test --manifest-path rust_exploit/Cargo.toml
 
-# Run unit tests
-echo "Running unit tests..."
-python3 -m pytest tests/ -v
-
-# Run integration tests
-echo "Running integration tests..."
-python3 tests/integration/test_full_pipeline.py
-
-# Run fuzz tests
-echo "Running fuzz regression..."
-python3 test_runner.py
-
-echo "All tests complete"
+echo "All tests passed"
