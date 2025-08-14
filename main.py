@@ -12,6 +12,7 @@ def main():
     ap.add_argument('-f', '--fuzz', action='store_true')
     ap.add_argument('-v', '--vuln', action='store_true')
     ap.add_argument('--triage', action='store_true')
+    ap.add_argument('--rust', action='store_true')
     
     args = ap.parse_args()
     
@@ -27,8 +28,13 @@ def main():
         initDB()
         tr = Triage("findings")
         tr.run_triage(args.target)
+    elif args.rust:
+        from rust_integration import RustIntegration
+        rust = RustIntegration()
+        print(f"Rust version: {rust.get_version()}")
+        print(f"Architecture: {rust.check_arch()}-bit")
     else:
-        print("specify -f, -v, or --triage")
+        print("specify -f, -v, --triage, or --rust")
 
 if __name__ == "__main__":
     main()

@@ -23,6 +23,12 @@ class RustIntegration:
         
         self.lib.rust_rop_chain.argtypes = [ctypes.c_void_p]
         self.lib.rust_rop_chain.restype = ctypes.c_int
+
+        self.lib.rust_stack_smash.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_uint64]
+        self.lib.rust_stack_smash.restype = ctypes.c_int
+
+        self.lib.rust_get_version.restype = ctypes.c_char_p
+        self.lib.rust_check_arch.restype = ctypes.c_int
         
     def run_rust_exploit(self, target_addr, payload):
         if not self.lib:
@@ -53,3 +59,18 @@ class RustIntegration:
             self.lib.rust_free_encoded(encoded)
             return bytes(decoded)
         return data
+
+    def get_version(self):
+        if not self.lib:
+            return "rust-unavailable"
+        return self.lib.rust_get_version().decode()
+
+    def check_arch(self):
+        if not self.lib:
+            return 0
+        return self.lib.rust_check_arch()
+
+    def stack_overflow(self, buf_addr, size, ret_addr):
+        if not self.lib:
+            return False
+        return self.lib.rust_stack_smash(buf_addr, size, ret_addr) == 0
