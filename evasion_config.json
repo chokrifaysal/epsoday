@@ -1,0 +1,31 @@
+{
+    "bypass_techniques": {
+        "ntdll_unhook": true,
+        "direct_syscall": true,
+        "indirect_syscall": false,
+        "etw_disable": true,
+        "amsi_patch": true,
+        "sleep_obfuscation": true,
+        "stack_spoofing": true
+    },
+    "memory_hiding": {
+        "allocate_noaccess": true,
+        "heap_protection": true,
+        "process_doppelganging": false,
+        "dll_hollowing": true,
+        "ghost_writing": true
+    },
+    "anti_analysis": {
+        "debugger_check": true,
+        "sandbox_check": true,
+        "timing_attacks": true,
+        "string_obfuscation": true,
+        "decoy_threads": true
+    },
+    "stealth_options": {
+        "parent_process": "explorer.exe",
+        "window_class": "Shell_TrayWnd",
+        "injection_method": "process_hollowing",
+        "cleanup_after": true
+    }
+}

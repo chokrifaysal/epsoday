@@ -4,6 +4,7 @@ import argparse
 from fuzz import runFuzz
 from vuln import trackVuln, getVulns, initDB
 from triage import Triage
+from evasion import EDRBypass, SleepObfuscation, StackSpoofing
 
 def main():
     ap = argparse.ArgumentParser()
@@ -11,6 +12,7 @@ def main():
     ap.add_argument('-f', '--fuzz', action='store_true')
     ap.add_argument('-v', '--vuln', action='store_true')
     ap.add_argument('--triage', action='store_true')
+    ap.add_argument('--evasion', action='store_true')
     
     args = ap.parse_args()
     
@@ -23,8 +25,11 @@ def main():
         tr = Triage("findings")
         tr.run_triage(args.target)
         print(f"Triaged {len(tr.results)} crashes")
+    elif args.evasion:
+        print("evasion toolkit loaded")
+        # TODO: implement evasion chain
     else:
-        print("specify -f, -v, or --triage")
+        print("specify -f, -v, --triage, or --evasion")
 
 if __name__ == "__main__":
     main()
