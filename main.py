@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import argparse
+import os
 from fuzz import runFuzz
-from vuln import trackVuln, getVulns, initDB
+from vuln import trackVuln, initDB
 from triage import Triage
-from pathlib import Path
 
 def main():
     ap = argparse.ArgumentParser()
@@ -15,6 +15,10 @@ def main():
     
     args = ap.parse_args()
     
+    if not os.path.exists(args.target):
+        print(f"{args.target} not found")
+        sys.exit(1)
+        
     if args.fuzz:
         runFuzz(args.target)
     elif args.vuln:

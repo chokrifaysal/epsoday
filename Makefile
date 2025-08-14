@@ -1,13 +1,12 @@
 CC = gcc
 CFLAGS = -O3 -g -fsanitize=address
-TARGET = harness
 
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-    CFLAGS += -D_GNU_SOURCE
-endif
-ifeq ($(UNAME_S),Darwin)
-    CFLAGS += -D_DARWIN_C_SOURCE
+ifeq ($(OS),Windows_NT)
+    TARGET = harness.exe
+    RM = del
+else
+    TARGET = harness
+    RM = rm -f
 endif
 
 all: $(TARGET)
@@ -16,9 +15,12 @@ $(TARGET): harness.c
 	$(CC) $(CFLAGS) -o $(TARGET) harness.c
 
 clean:
-	rm -f $(TARGET) *.o
+	$(RM) $(TARGET) *.o
 
-test: $(TARGET)
+test:
 	python3 -m pytest tests/ -v
 
-.PHONY: all clean test
+install:
+	python3 install.py
+
+.PHONY: all clean test install
