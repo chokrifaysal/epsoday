@@ -1,0 +1,14 @@
+{
+  "test_suite": {
+    "unit_tests": ["test_harness.py", "test_vuln_tracking.py"],
+    "integration_tests": ["test_full_pipeline.py"],
+    "fuzz_tests": ["test_afl_integration.py"],
+    "reliability_threshold": 85,
+    "timeout": 30
+  },
+  "ci": {
+    "build_stages": ["compile", "test", "package", "deploy"],
+    "parallel_jobs": 4,
+    "cache_dependencies": true
+  }
+}
