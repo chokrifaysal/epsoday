@@ -1,9 +1,9 @@
 import os
 import subprocess
-import json
+import shutil
 
 cfg = {
-    'afl_path': '/usr/local/bin/afl-fuzz',
+    'afl_path': shutil.which('afl-fuzz') or '/usr/local/bin/afl-fuzz',
     'in_dir': 'corpus',
     'out_dir': 'findings',
     'dict_dir': 'dicts',

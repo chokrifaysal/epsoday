@@ -1,6 +1,7 @@
+FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y \
-    gcc \
+    build-essential \
     python3 \
     python3-pip \
     gdb \
@@ -9,13 +10,17 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     rustc \
-    cargo
+    cargo \
+    valgrind
 
 WORKDIR /app
 
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+
 COPY . .
 
-RUN pip3 install -r requirements.txt
+RUN cd rust_exploit && cargo build --release && cd ..
 RUN make
 
 EXPOSE 8080
