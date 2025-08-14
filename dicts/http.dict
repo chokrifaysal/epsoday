@@ -1,0 +1,10 @@
+GET
+POST
+PUT
+DELETE
+HTTP/1.1
+HTTP/1.0
+Content-Length:
+Content-Type:
+application/json
+text/html
