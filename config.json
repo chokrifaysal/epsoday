@@ -1,0 +1,15 @@
+{
+    "fuzzing": {
+        "timeout": 1000,
+        "memory_limit": "none",
+        "dict_paths": ["dicts/http.dict", "dicts/jpeg.dict"],
+        "seeds": ["corpus/basic", "corpus/edge"]
+    },
+    "targets": {
+        "harness": {
+            "path": "./harness",
+            "type": "file",
+            "format": "raw"
+        }
+    }
+}
