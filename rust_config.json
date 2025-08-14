@@ -1,0 +1,27 @@
+{
+  "rust_modules": {
+    "enabled": true,
+    "build_path": "rust_exploit/target/release/",
+    "libraries": [
+      "librust_exploit.so",
+      "librust_ffi.so"
+    ],
+    "exploits": {
+      "house_of_rust": {
+        "description": "Safe-linking bypass without leaks",
+        "reliability": 0.92,
+        "glibc_versions": ["2.32", "2.33", "2.34", "2.35"]
+      },
+      "heap_spray": {
+        "description": "Memory-safe heap spray",
+        "reliability": 0.98
+      }
+    },
+    "features": {
+      "memory_safety": true,
+      "zero_copy": false,
+      "async_support": false,
+      "ffi_bindings": true
+    }
+  }
+}
